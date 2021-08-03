@@ -1,6 +1,8 @@
 import Coupon from "./Coupon";
 import Order from "./Order";
 
+const couponDate = new Date("2011-10-10");
+
 test("Não deve criar um pedido com CPF inválido", function () {
     const cpf = "111.111.111-11";
     expect(() => new Order(cpf)).toThrow(new Error("Invalid CPF"));
@@ -22,7 +24,7 @@ test("Deve criar um pedido com cupom de desconto", function () {
     order.addItem("Guitarra", 1000, 2);
     order.addItem("Amplificador", 5000, 1);
     order.addItem("Cabo", 30, 3);
-    order.addCoupon(new Coupon("VALE20", 20));
+    order.addCoupon(new Coupon("VALE20", 20, couponDate));
     const total = order.getTotal();
     expect(total).toBe(5672);
 });
