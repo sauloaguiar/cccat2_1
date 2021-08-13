@@ -20,9 +20,6 @@ export default class PlaceOrder {
         }
         if (input.coupon) {
             const coupon = this.coupons.find(coupon => coupon.code === input.coupon);
-            if (coupon?.isExpired()) {
-                throw new Error("Cupom expirado!")
-            }
             if (coupon) order.addCoupon(coupon);
         }
         const total = order.getTotal();

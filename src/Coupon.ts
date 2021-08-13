@@ -10,6 +10,6 @@ export default class Coupon {
     }
 
     isExpired() {
-        return (new Date()) >= this.expiringDate
+        return (new Date().getTime()) >= this.expiringDate.getTime()
     }
 }

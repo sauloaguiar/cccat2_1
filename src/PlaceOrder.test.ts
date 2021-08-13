@@ -15,7 +15,7 @@ test("Deve fazer um pedido", function () {
     expect(output.total).toBe(5672);
 });
 
-test("Deve rejeitar um coupon expirado", function() {
+test("Deve fazer um pedido com coupon de desconto expirado", function () {
     const input = {
         cpf: "778.278.412-36",
         items: [
@@ -23,9 +23,9 @@ test("Deve rejeitar um coupon expirado", function() {
             { description: "Amplificador", price: 5000, quantity: 1},
             { description: "Cabo", price: 30, quantity: 3}
         ],
-        coupon: "EXPIRADO"
+        coupon: "EXPIRED"
     };
     const placeOrder = new PlaceOrder();
-    expect(placeOrder.execute(input)).toThrow(new Error("Cupom expirado!"))
-});
-
+    const output = placeOrder.execute(input);
+    expect(output.total).toBe(7090);
+})
