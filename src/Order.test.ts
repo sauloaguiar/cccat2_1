@@ -29,7 +29,7 @@ test("Deve criar um pedido com cupom de desconto", function () {
     expect(total).toBe(5672);
 });
 
-test("Deve rejeitar um coupon expirado", function() {
+test("Deve criar um pedido com coupon expirado", function() {
     const cpf = "778.278.412-36";
     const order = new Order(cpf);
     order.addItem("Guitarra", 1000, 2);

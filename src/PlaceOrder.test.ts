@@ -6,39 +6,44 @@ const distanceGateway = new DistanceGateway();
 test("Deve fazer um pedido", function () {
     const input = {
         cpf: "778.278.412-36",
+        zipcode: "11.111-11",
         items: [
-            { description: "Guitarra", price: 1000, quantity: 2},
-            { description: "Amplificador", price: 5000, quantity: 1},
-            { description: "Cabo", price: 30, quantity: 3}
+            { id: '1', quantity: 2},
+            { id: '2', quantity: 1},
+            { id: '3', quantity: 3}
         ],
         coupon: "VALE20"
     };
     const placeOrder = new PlaceOrder(distanceGateway);
     const output = placeOrder.execute(input);
-    expect(output.total).toBe(5672);
+    expect(output.total).toBe(5982);
 });
 
 test("Deve fazer um pedido com coupon de desconto expirado", function () {
     const input = {
         cpf: "778.278.412-36",
+        zipcode: "11.111-11",
         items: [
-            { description: "Guitarra", price: 1000, quantity: 2},
-            { description: "Amplificador", price: 5000, quantity: 1},
-            { description: "Cabo", price: 30, quantity: 3}
+            { id: '1', quantity: 2},
+            { id: '2', quantity: 1},
+            { id: '3', quantity: 3}
         ],
         coupon: "EXPIRED"
     };
     const distanceGateway = new DistanceGateway();
     const placeOrder = new PlaceOrder(distanceGateway);
     const output = placeOrder.execute(input);
-    expect(output.total).toBe(7090);
+    expect(output.total).toBe(7400);
 });
 
 test("Deve custar R$ 30,00 para enviar guitarra", () => {
     const input = {
         cpf: "778.278.412-36",
+        zipcode: '11.111-111',
         items: [
-            { description: "Guitarra", price: 1000, quantity: 2},
+            { id: "1", quantity: 2},
+            { id: "2", quantity: 1},
+            { id: "3", quantity: 3}
         ]
     };
 
@@ -50,6 +55,6 @@ test("Deve custar R$ 30,00 para enviar guitarra", () => {
     // quem seria a entidade que teria o cep de origem e destino armazenado?
     
     const output = placeOrder.execute(input);
-    expect(output.total).toBe(5672);
+    expect(output.freight).toBe(310);
 })
 
