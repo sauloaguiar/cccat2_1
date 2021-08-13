@@ -1,5 +1,5 @@
 export default class DistanceGateway {
-  getDistanceBetween() {
+  getDistanceBetween(originZipcode: string, destinationZipcode: string) {
     return 1000
   }
 }
