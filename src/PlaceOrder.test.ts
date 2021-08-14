@@ -47,14 +47,29 @@ test("Deve custar R$ 30,00 para enviar guitarra", () => {
         ]
     };
 
-    // eu deveria adicionar a logica de custo de frete ao caso de uso PlaceOrder?
-    // ou eu deveria ter um caso de uso específico para calcular esse custo e os casos de uso se comunicariam?
     const placeOrder = new PlaceOrder(distanceGateway);
-
-    // sendo no mesmo caso de uso - eu adicionaria um novo metodo? estimateDeliveryCost?
-    // quem seria a entidade que teria o cep de origem e destino armazenado?
-    
     const output = placeOrder.execute(input);
     expect(output.freight).toBe(310);
-})
+});
+
+// test("Deve gerar informações do pedido", () => {
+//     const cpf = "778.278.412-36"
+//     const zipcode = '11.111-111';
+//     const input = {
+//         cpf,
+//         zipcode,
+//         items: [
+//             { id: "1", quantity: 2},
+//             { id: "2", quantity: 1},
+//             { id: "3", quantity: 3}
+//         ]
+//     };
+
+//     const placeOrder = new PlaceOrder(distanceGateway);
+//     const output = placeOrder.execute(input);
+//     // check for orderCode, cpf, zipcode, items, price, quantity, discount?, freight, total
+//     expect(output.getOrderInfo()).toBe({
+//         cpf,
+//     });
+// })
 

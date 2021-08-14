@@ -7,11 +7,13 @@ export default class Order {
     items: OrderItem[];
     coupon: Coupon | undefined;
     freight: number;
+    orderNumber: number;
 
-    constructor (cpf: string) {
+    constructor (cpf: string, orderNumber: number) {
         this.cpf = new Cpf(cpf);
         this.items = [];
         this.freight = 0;
+        this.orderNumber = orderNumber;
     }
 
     addItem (description: string, price: number, quantity: number) {
@@ -34,5 +36,13 @@ export default class Order {
         }
         total += this.freight;
         return total;
+    }
+
+    getOrderNumber() {
+        return (new Date().getFullYear()) + this.zeroPad(this.orderNumber, 8);
+    }
+
+    private zeroPad(number: number, pad: number) {
+        return String(number).padStart(pad, "0");
     }
 }

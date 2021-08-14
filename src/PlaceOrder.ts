@@ -8,6 +8,7 @@ export default class PlaceOrder {
     distanceGateway: DistanceGateway
     orders: Order[];
     items: Item[];
+    orderNumber: number;
 
     constructor (distanceGateway: DistanceGateway) {
         this.coupons = [
@@ -21,10 +22,12 @@ export default class PlaceOrder {
         ],
         this.orders = [];
         this.distanceGateway = distanceGateway
+        this.orderNumber = 0;
     }
 
     execute (input: any) : any {
-        const order = new Order(input.cpf);
+        this.orderNumber++;
+        const order = new Order(input.cpf, this.orderNumber);
         const distance = this.distanceGateway.getDistanceBetween(input.zipcode, "99.999-99");
         for (const orderItem of input.items) {
             const item = this.items.find(item => item.id === orderItem.id)
@@ -41,7 +44,8 @@ export default class PlaceOrder {
         this.orders.push(order);
         return {
             freight: order.freight,
-            total
+            total,
+            orderCode: order.getOrderNumber()
         };
     }
 }
