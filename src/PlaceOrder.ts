@@ -29,7 +29,7 @@ export default class PlaceOrder {
     execute (input: any) : any {
         this.orderNumber++;
         const order = new Order(input.cpf, this.orderNumber);
-        const distance = this.distanceGateway.getDistanceBetween(input.zipcode, "99.999-99");
+        const distance = this.distanceGateway.calculate(input.zipcode, "99.999-99");
         for (const orderItem of input.items) {
             const item = this.items.find(item => item.id === orderItem.id)
             if (!item) throw new Error('Item not found');
@@ -43,7 +43,6 @@ export default class PlaceOrder {
         }
 
         this.orders.push(order);
-        const output = new PlaceOrderOutput({total: order.getTotal(), freight: order.freight, orderCode: order.getOrderNumber()})
-        return output;
+        return new PlaceOrderOutput({total: order.getTotal(), freight: order.freight, orderCode: order.getOrderNumber()})
     }
 }

@@ -1,5 +1,3 @@
-export default class DistanceGateway {
-  getDistanceBetween(originZipcode: string, destinationZipcode: string) {
-    return 1000
-  }
+export default interface DistanceGatewayAPI {
+  calculate(originZipcode: string, destinationZipcode: string): number;
 }
