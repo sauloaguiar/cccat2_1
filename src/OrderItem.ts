@@ -1,10 +1,11 @@
 export default class OrderItem {
-    description: string;
+    // reference the item by identity
+    id: string;
     price: number;
     quantity: number;
 
-    constructor (description: string, price: number, quantity: number) {
-        this.description = description;
+    constructor (id: string, price: number, quantity: number) {
+        this.id = id;
         this.price = price;
         this.quantity = quantity;
     }

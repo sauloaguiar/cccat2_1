@@ -3,6 +3,7 @@ import Order from "./Order"
 import DistanceGateway from  './DistanceGateway';
 import Item from "./Item";
 import FreightCalculator from './FreightCalculator';
+import PlaceOrderOutput from "./PlaceOrderOutput";
 export default class PlaceOrder {
     coupons: Coupon[]; // replace with coupon repository
     distanceGateway: DistanceGateway
@@ -32,7 +33,7 @@ export default class PlaceOrder {
         for (const orderItem of input.items) {
             const item = this.items.find(item => item.id === orderItem.id)
             if (!item) throw new Error('Item not found');
-            order.addItem(orderItem.description, item.price, orderItem.quantity);
+            order.addItem(orderItem.id, item.price, orderItem.quantity);
             order.freight += FreightCalculator.calculate(distance, item) * orderItem.quantity;
             
         }
@@ -40,12 +41,9 @@ export default class PlaceOrder {
             const coupon = this.coupons.find(coupon => coupon.code === input.coupon);
             if (coupon) order.addCoupon(coupon);
         }
-        const total = order.getTotal();
+
         this.orders.push(order);
-        return {
-            freight: order.freight,
-            total,
-            orderCode: order.getOrderNumber()
-        };
+        const output = new PlaceOrderOutput({total: order.getTotal(), freight: order.freight, orderCode: order.getOrderNumber()})
+        return output;
     }
 }
