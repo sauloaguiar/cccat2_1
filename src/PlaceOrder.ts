@@ -28,7 +28,7 @@ export default class PlaceOrder {
 
     execute (input: any) : any {
         this.orderNumber++;
-        const order = new Order(input.cpf, this.orderNumber);
+        const order = new Order(input.cpf);
         const distance = this.distanceGateway.calculate(input.zipcode, "99.999-99");
         for (const orderItem of input.items) {
             const item = this.items.find(item => item.id === orderItem.id)
