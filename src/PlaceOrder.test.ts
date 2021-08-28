@@ -1,3 +1,4 @@
+import CouponRepositoryMemory from './CouponRepositoryMemory';
 import DistanceGatewayAPIMemory from './DistanceGatewayAPIMemory';
 import ItemRepositoryMemory from './ItemRepositoryMemory';
 import OrderRepositoryMemory from './OrderRepositoryMemory';
@@ -18,7 +19,7 @@ test("Deve fazer um pedido", function () {
         coupon: "VALE20"
     });
 
-    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
     const output = placeOrder.execute(input);
     expect(output.total).toBe(5982);
 });
@@ -36,7 +37,7 @@ test("Deve fazer um pedido com coupon de desconto expirado", function () {
         coupon: "EXPIRED"
     });
 
-    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
     const output = placeOrder.execute(input);
     expect(output.total).toBe(7400);
 });
@@ -53,7 +54,7 @@ test("Deve custar R$ 30,00 para enviar guitarra", () => {
         coupon: "EXPIRED"
     });
     
-    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
     const output = placeOrder.execute(input);
     expect(output.freight).toBe(310);
 });

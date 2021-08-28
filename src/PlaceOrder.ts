@@ -6,18 +6,16 @@ import FreightCalculator from './FreightCalculator';
 import PlaceOrderOutput from "./PlaceOrderOutput";
 import ItemRepository from "./ItemRepository";
 import OrderRepository from "./OrderRepository";
+import CouponRepository from "./CouponRepository";
 export default class PlaceOrder {
-    coupons: Coupon[]; // replace with coupon repository
     distanceGateway: DistanceGateway
     orderNumber: number;
     itemRepository: ItemRepository;
     orderRepository: OrderRepository;
+    couponRepository: CouponRepository;
 
-    constructor (itemRepository: ItemRepository, orderRepository: OrderRepository, distanceGateway: DistanceGateway) {
-        this.coupons = [
-            new Coupon("VALE20", 20, new Date("2021-10-10")),
-            new Coupon("EXPIRADO", 20, new Date("2011-10-10"))
-        ];
+    constructor (itemRepository: ItemRepository, couponRepository: CouponRepository, orderRepository: OrderRepository, distanceGateway: DistanceGateway) {
+        this.couponRepository = couponRepository;
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
         this.distanceGateway = distanceGateway
@@ -35,7 +33,7 @@ export default class PlaceOrder {
             order.freight += FreightCalculator.calculate(distance, item) * orderItem.quantity;
         }
         if (input.coupon) {
-            const coupon = this.coupons.find(coupon => coupon.code === input.coupon);
+            const coupon = this.couponRepository.getByCode(input.coupon);
             if (coupon) order.addCoupon(coupon);
         }
 
