@@ -1,9 +1,9 @@
-import CouponRepositoryMemory from './CouponRepositoryMemory';
-import DistanceGatewayAPIMemory from './DistanceGatewayAPIMemory';
-import ItemRepositoryMemory from './ItemRepositoryMemory';
-import OrderRepositoryMemory from './OrderRepositoryMemory';
-import PlaceOrder from "./PlaceOrder";
-import PlaceOrderInput from './PlaceOrderInput';
+import CouponRepositoryMemory from '../../src/infra/repository/memory/CouponRepositoryMemory';
+import DistanceGatewayAPIMemory from '../../src/infra/gateway/memory/DistanceGatewayAPIMemory';
+import ItemRepositoryMemory from '../../src/infra/repository/memory/ItemRepositoryMemory';
+import OrderRepositoryMemory from '../../src/infra/repository/memory/OrderRepositoryMemory';
+import PlaceOrder from "../../src/application/PlaceOrder";
+import PlaceOrderInput from '../../src/application/PlaceOrderInput';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 

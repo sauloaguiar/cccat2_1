@@ -1,12 +1,12 @@
-import Coupon from "./Coupon";
-import Order from "./Order"
-import DistanceGateway from  './DistanceGateway';
-import Item from "./Item";
-import FreightCalculator from './FreightCalculator';
+import Coupon from "../domain/entity/Coupon";
+import Order from "../domain/entity/Order"
+import DistanceGateway from  '../domain/gateway/DistanceGateway';
+import Item from "../domain/entity/Item";
+import FreightCalculator from '../domain/services/FreightCalculator';
 import PlaceOrderOutput from "./PlaceOrderOutput";
-import ItemRepository from "./ItemRepository";
-import OrderRepository from "./OrderRepository";
-import CouponRepository from "./CouponRepository";
+import ItemRepository from "../domain/repository/ItemRepository";
+import OrderRepository from "../domain/repository/OrderRepository";
+import CouponRepository from "../domain/repository/CouponRepository";
 export default class PlaceOrder {
     distanceGateway: DistanceGateway
     orderNumber: number;

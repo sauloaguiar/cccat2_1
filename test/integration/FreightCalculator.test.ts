@@ -1,5 +1,5 @@
-import FreightCalculator from './FreightCalculator';
-import Item from './Item';
+import FreightCalculator from '../../src/domain/services/FreightCalculator';
+import Item from '../../src/domain/entity/Item';
 
 test('Deve custar R$ 30,00 para enviar uma guitarra', () => {
   const guitarra = new Item("1", "Guitarra", 1000, 100, 50, 15, 3);
