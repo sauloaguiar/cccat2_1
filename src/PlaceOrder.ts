@@ -37,7 +37,7 @@ export default class PlaceOrder {
             if (coupon) order.addCoupon(coupon);
         }
 
-        this.orderRepository.push(order);
+        this.orderRepository.save(order);
         return new PlaceOrderOutput({total: order.getTotal(), freight: order.freight, orderCode: order.getOrderNumber()})
     }
 }
