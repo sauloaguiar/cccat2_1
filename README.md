@@ -21,3 +21,4 @@ npm run test
 - Repositório é uma abstração de uma coleção. A coleção pode ser implementada de diferentes formas.
   - Um repositório pode ser definido via interface onde os métodos expõe o comportamento desejado - conhecido como contrato.
   - Contratos pertencem ao domínio da aplicação. A implementação equivalente pertence a outra camada, por exemplo, infra.
+  - Primeiro define-se o contrato para que ele possa reger a implementação.

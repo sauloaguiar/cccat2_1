@@ -1,7 +1,5 @@
-import Coupon from "../domain/entity/Coupon";
 import Order from "../domain/entity/Order"
 import DistanceGateway from  '../domain/gateway/DistanceGateway';
-import Item from "../domain/entity/Item";
 import FreightCalculator from '../domain/services/FreightCalculator';
 import PlaceOrderOutput from "./PlaceOrderOutput";
 import ItemRepository from "../domain/repository/ItemRepository";
@@ -22,15 +20,16 @@ export default class PlaceOrder {
         this.orderNumber = 0;
     }
 
-    execute (input: any) : any {
+    async execute (input: any) : Promise<PlaceOrderOutput> {
         this.orderNumber++;
         const order = new Order(input.cpf);
         const distance = this.distanceGateway.calculate(input.zipcode, "99.999-99");
         for (const orderItem of input.items) {
-            const item = this.itemRepository.getById(orderItem.id);
+            const item = await this.itemRepository.getById(orderItem.id);
             if (!item) throw new Error('Item not found');
             order.addItem(orderItem.id, item.price, orderItem.quantity);
-            order.freight += FreightCalculator.calculate(distance, item) * orderItem.quantity;
+            const freight = FreightCalculator.calculate(distance, item) * orderItem.quantity;
+            order.freight += freight;
         }
         if (input.coupon) {
             const coupon = this.couponRepository.getByCode(input.coupon);

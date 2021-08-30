@@ -4,79 +4,86 @@ import ItemRepositoryMemory from '../../src/infra/repository/memory/ItemReposito
 import OrderRepositoryMemory from '../../src/infra/repository/memory/OrderRepositoryMemory';
 import PlaceOrder from "../../src/application/PlaceOrder";
 import PlaceOrderInput from '../../src/application/PlaceOrderInput';
+import PgPromiseDatabase from '../../src/infra/database/PgPromiseDatabase';
+import ItemRepositoryDatabase from '../../src/infra/repository/database/ItemRepositoryDatabase';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
-test("Deve fazer um pedido", function () {
-    const input = new PlaceOrderInput({
-        cpf: "778.278.412-36",
-        zipcode: "11.111-11",
-        items: [
-            { id: '1', quantity: 2},
-            { id: '2', quantity: 1},
-            { id: '3', quantity: 3}
-        ],
-        coupon: "VALE20"
+describe('PlaceOrder Tests', () => {
+
+
+    test("Deve fazer um pedido", async function () {
+        const input = new PlaceOrderInput({
+            cpf: "778.278.412-36",
+            zipcode: "11.111-11",
+            items: [
+                { id: '1', quantity: 2},
+                { id: '2', quantity: 1},
+                { id: '3', quantity: 3}
+            ],
+            coupon: "VALE20"
+        });
+
+        // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(new PgPromiseDatabase()), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const output = await placeOrder.execute(input);
+        expect(output.total).toBe(5982);
     });
 
-    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-    const output = placeOrder.execute(input);
-    expect(output.total).toBe(5982);
-});
+    test("Deve fazer um pedido com coupon de desconto expirado", async function () {
 
-test("Deve fazer um pedido com coupon de desconto expirado", function () {
+        const input = new PlaceOrderInput({
+            cpf: "778.278.412-36",
+            zipcode: "11.111-11",
+            items: [
+                { id: '1', quantity: 2},
+                { id: '2', quantity: 1},
+                { id: '3', quantity: 3}
+            ],
+            coupon: "VALE20_EXPIRED"
+        });
 
-    const input = new PlaceOrderInput({
-        cpf: "778.278.412-36",
-        zipcode: "11.111-11",
-        items: [
-            { id: '1', quantity: 2},
-            { id: '2', quantity: 1},
-            { id: '3', quantity: 3}
-        ],
-        coupon: "EXPIRED"
+        // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(new PgPromiseDatabase()), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const output = await placeOrder.execute(input);
+        expect(output.total).toBe(7400);
     });
 
-    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-    const output = placeOrder.execute(input);
-    expect(output.total).toBe(7400);
-});
-
-test("Deve custar R$ 30,00 para enviar guitarra", () => {
-    const input = new PlaceOrderInput({
-        cpf: "778.278.412-36",
-        zipcode: '11.111-111',
-        items: [
-            { id: "1", quantity: 2},
-            { id: "2", quantity: 1},
-            { id: "3", quantity: 3}
-        ],
-        coupon: "EXPIRED"
+    test("Deve custar R$ 30,00 para enviar guitarra", async () => {
+        const input = new PlaceOrderInput({
+            cpf: "778.278.412-36",
+            zipcode: '11.111-111',
+            items: [
+                { id: "1", quantity: 2},
+                { id: "2", quantity: 1},
+                { id: "3", quantity: 3}
+            ],
+            coupon: "EXPIRED"
+        });
+        
+        const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const output = await placeOrder.execute(input);
+        expect(output.freight).toBe(310);
     });
-    
-    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-    const output = placeOrder.execute(input);
-    expect(output.freight).toBe(310);
-});
 
-// test("Deve gerar informações do pedido", () => {
-//     const cpf = "778.278.412-36"
-//     const zipcode = '11.111-111';
-//     const input = {
-//         cpf,
-//         zipcode,
-//         items: [
-//             { id: "1", quantity: 2},
-//             { id: "2", quantity: 1},
-//             { id: "3", quantity: 3}
-//         ]
-//     };
+    // test("Deve gerar informações do pedido", () => {
+    //     const cpf = "778.278.412-36"
+    //     const zipcode = '11.111-111';
+    //     const input = {
+    //         cpf,
+    //         zipcode,
+    //         items: [
+    //             { id: "1", quantity: 2},
+    //             { id: "2", quantity: 1},
+    //             { id: "3", quantity: 3}
+    //         ]
+    //     };
 
-//     const placeOrder = new PlaceOrder(distanceGateway);
-//     const output = placeOrder.execute(input);
-//     // check for orderCode, cpf, zipcode, items, price, quantity, discount?, freight, total
-//     expect(output.getOrderInfo()).toBe({
-//         cpf,
-//     });
-// })
-
+    //     const placeOrder = new PlaceOrder(distanceGateway);
+    //     const output = placeOrder.execute(input);
+    //     // check for orderCode, cpf, zipcode, items, price, quantity, discount?, freight, total
+    //     expect(output.getOrderInfo()).toBe({
+    //         cpf,
+    //     });
+    // })
+})

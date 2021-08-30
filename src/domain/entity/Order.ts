@@ -33,10 +33,13 @@ export default class Order {
         for (const orderItem of this.items) {
             total += orderItem.getTotal();
         }
+
         if (this.coupon) {
-            total -= (total * this.coupon.percentage)/100;
+            const discount = (total * this.coupon.percentage)/100;
+            total -= discount;
         }
         total += this.freight;
+
         return total;
     }
 
