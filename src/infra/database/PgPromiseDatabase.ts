@@ -2,9 +2,17 @@ import pgp from "pg-promise";
 import Database from "./Database"
 
 export default class PgPromiseDatabase implements Database {
-  pgp: any;
+  private pgp: any;
+  static instance: PgPromiseDatabase
   
-  constructor() {
+  static getInstance()  {
+    if (!PgPromiseDatabase.instance) {
+      PgPromiseDatabase.instance = new PgPromiseDatabase();
+    }
+    return PgPromiseDatabase.instance;
+  }
+
+  private constructor() {
     this.pgp = pgp()("postgres://ccca:123456@localhost:5432")
   }
 

@@ -2,7 +2,7 @@ import Coupon from "../entity/Coupon";
 
 export default interface CouponRepository {
   
-  getByCode(code: string): Coupon | undefined
-  getCouponList(): Coupon[]
+  getByCode(code: string): Promise<Coupon | undefined>
+  getCouponList(): Promise<Coupon[]>
 
 }

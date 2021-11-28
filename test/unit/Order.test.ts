@@ -1,7 +1,7 @@
 import Coupon from "../../src/domain/entity/Coupon";
 import Order from "../../src/domain/entity/Order";
 
-const couponDate = new Date("2021-10-10");
+const couponDate = new Date("2022-10-10");
 
 test("Não deve criar um pedido com CPF inválido", function () {
     const cpf = "111.111.111-11";
@@ -18,7 +18,7 @@ test("Deve criar um pedido com 3 itens", function () {
     expect(total).toBe(7090);
 });
 
-test("Deve criar um pedido com cupom de desconto", function () {
+test.only("Deve criar um pedido com cupom de desconto", function () {
     const cpf = "778.278.412-36";
     const order = new Order(cpf);
     order.addItem("Guitarra", 1000, 2);

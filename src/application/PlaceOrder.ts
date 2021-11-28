@@ -32,7 +32,7 @@ export default class PlaceOrder {
             order.freight += freight;
         }
         if (input.coupon) {
-            const coupon = this.couponRepository.getByCode(input.coupon);
+            const coupon = await this.couponRepository.getByCode(input.coupon);
             if (coupon) order.addCoupon(coupon);
         }
 

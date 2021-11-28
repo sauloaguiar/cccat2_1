@@ -4,7 +4,7 @@ describe("PgPromise Connector", () => {
   let pgPromiseDatabase: PgPromiseDatabase;
   
   beforeAll(() => {
-    pgPromiseDatabase = new PgPromiseDatabase();
+    pgPromiseDatabase = PgPromiseDatabase.getInstance();
   })
 
   test("Deve conectar no banco de dados e listar os itens", async () => {  

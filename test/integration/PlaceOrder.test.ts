@@ -6,13 +6,18 @@ import PlaceOrder from "../../src/application/PlaceOrder";
 import PlaceOrderInput from '../../src/application/PlaceOrderInput';
 import PgPromiseDatabase from '../../src/infra/database/PgPromiseDatabase';
 import ItemRepositoryDatabase from '../../src/infra/repository/database/ItemRepositoryDatabase';
+import CouponRepositoryDatabase from '../../src/infra/repository/database/CouponRepositoryDatabase';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
 describe('PlaceOrder Tests', () => {
 
+    // let database: PgPromiseDatabase;
+    // beforeEach(() => {
+    //     database = new PgPromiseDatabase();
+    // })
 
-    test("Deve fazer um pedido", async function () {
+    test.only("Deve fazer um pedido", async function () {
         const input = new PlaceOrderInput({
             cpf: "778.278.412-36",
             zipcode: "11.111-11",
@@ -23,9 +28,10 @@ describe('PlaceOrder Tests', () => {
             ],
             coupon: "VALE20"
         });
-
+        const database = PgPromiseDatabase.getInstance();
         // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(new PgPromiseDatabase()), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        // const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryDatabase(database), new OrderRepositoryMemory(), distanceGateway);
         const output = await placeOrder.execute(input);
         expect(output.total).toBe(5982);
     });
@@ -43,8 +49,11 @@ describe('PlaceOrder Tests', () => {
             coupon: "VALE20_EXPIRED"
         });
 
+        // const database = new PgPromiseDatabase();
+        const database = PgPromiseDatabase.getInstance();
         // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(new PgPromiseDatabase()), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        // const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryDatabase(database), new OrderRepositoryMemory(), distanceGateway);
         const output = await placeOrder.execute(input);
         expect(output.total).toBe(7400);
     });
@@ -61,7 +70,11 @@ describe('PlaceOrder Tests', () => {
             coupon: "EXPIRED"
         });
         
-        const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        // const database = new PgPromiseDatabase();
+        const database = PgPromiseDatabase.getInstance();
+        // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        // const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
+        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryDatabase(database), new OrderRepositoryMemory(), distanceGateway);
         const output = await placeOrder.execute(input);
         expect(output.freight).toBe(310);
     });
