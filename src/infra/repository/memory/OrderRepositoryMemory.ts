@@ -7,8 +7,14 @@ export default class OrderRepositoryMemory implements OrderRepository {
   constructor() {
     this.orders = []
   }
+  get(code: string): Promise<Order> {
+    throw new Error("Method not implemented.");
+  }
+  count(): Promise<number> {
+    return Promise.resolve(this.orders.length);
+  }
   
-  save(order: Order): void {
+  async save(order: Order): Promise<void> {
     this.orders.push(order);
   }
 

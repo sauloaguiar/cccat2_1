@@ -2,11 +2,13 @@ import CouponRepositoryMemory from '../../src/infra/repository/memory/CouponRepo
 import DistanceGatewayAPIMemory from '../../src/infra/gateway/memory/DistanceGatewayAPIMemory';
 import ItemRepositoryMemory from '../../src/infra/repository/memory/ItemRepositoryMemory';
 import OrderRepositoryMemory from '../../src/infra/repository/memory/OrderRepositoryMemory';
-import PlaceOrder from "../../src/application/PlaceOrder";
+import PlaceOrder from '../../src/application/PlaceOrder';
 import PlaceOrderInput from '../../src/application/PlaceOrderInput';
 import PgPromiseDatabase from '../../src/infra/database/PgPromiseDatabase';
 import ItemRepositoryDatabase from '../../src/infra/repository/database/ItemRepositoryDatabase';
 import CouponRepositoryDatabase from '../../src/infra/repository/database/CouponRepositoryDatabase';
+import ItemRepository from '../../src/domain/repository/ItemRepository';
+import CouponRepository from '../../src/domain/repository/CouponRepository';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
@@ -67,7 +69,7 @@ describe('PlaceOrder Tests', () => {
                 { id: "2", quantity: 1},
                 { id: "3", quantity: 3}
             ],
-            coupon: "EXPIRED"
+            coupon: "VALE20_EXPIRED"
         });
         
         // const database = new PgPromiseDatabase();
@@ -78,6 +80,26 @@ describe('PlaceOrder Tests', () => {
         const output = await placeOrder.execute(input);
         expect(output.freight).toBe(310);
     });
+
+    test("Deve fazer um pedido gerando um código", async () => {
+        const input = new PlaceOrderInput({
+            cpf: "778.278.412-36",
+            zipcode: '11.111-111',
+            items: [
+                { id: "1", quantity: 2},
+                { id: "2", quantity: 1},
+                { id: "3", quantity: 3}
+            ],
+            issueDate: new Date(),
+            coupon: "VALE20_EXPIRED"
+        });
+        const itemRepository = new ItemRepositoryMemory();
+        const couponRepository = new CouponRepositoryMemory();
+        const orderRepository = new OrderRepositoryMemory();
+        const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, distanceGateway);
+        const output = await placeOrder.execute(input);
+        expect(output.orderCode).toBe("202100000001")
+    })
 
     // test("Deve gerar informações do pedido", () => {
     //     const cpf = "778.278.412-36"

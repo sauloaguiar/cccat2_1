@@ -7,7 +7,6 @@ import OrderRepository from "../domain/repository/OrderRepository";
 import CouponRepository from "../domain/repository/CouponRepository";
 export default class PlaceOrder {
     distanceGateway: DistanceGateway
-    orderNumber: number;
     itemRepository: ItemRepository;
     orderRepository: OrderRepository;
     couponRepository: CouponRepository;
@@ -17,12 +16,11 @@ export default class PlaceOrder {
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
         this.distanceGateway = distanceGateway
-        this.orderNumber = 0;
     }
 
     async execute (input: any) : Promise<PlaceOrderOutput> {
-        this.orderNumber++;
-        const order = new Order(input.cpf);
+        const sequence = await this.orderRepository.count() + 1;
+        const order = new Order(input.cpf, input.issueDate, sequence);
         const distance = this.distanceGateway.calculate(input.zipcode, "99.999-99");
         for (const orderItem of input.items) {
             const item = await this.itemRepository.getById(orderItem.id);
