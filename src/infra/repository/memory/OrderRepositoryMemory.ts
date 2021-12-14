@@ -7,7 +7,12 @@ export default class OrderRepositoryMemory implements OrderRepository {
   constructor() {
     this.orders = []
   }
-  get(code: string): Promise<Order> {
+  
+  async clean(): Promise<void> {
+    this.orders = []
+  }
+  
+  async get(code: string): Promise<Order> {
     const order = this.orders.find(order => order.code.value === code);
     if (!order) {
       throw new Error("Order not found")
@@ -15,7 +20,7 @@ export default class OrderRepositoryMemory implements OrderRepository {
     return Promise.resolve(order);
   }
 
-  count(): Promise<number> {
+  async count(): Promise<number> {
     return Promise.resolve(this.orders.length);
   }
   

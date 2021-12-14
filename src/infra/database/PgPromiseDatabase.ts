@@ -13,6 +13,7 @@ export default class PgPromiseDatabase implements Database {
   }
 
   private constructor() {
+    // this.pgp = pgp({query(e) {console.log(e.query)}})("postgres://ccca:123456@localhost:5432")
     this.pgp = pgp()("postgres://ccca:123456@localhost:5432")
   }
 
@@ -21,6 +22,9 @@ export default class PgPromiseDatabase implements Database {
   }
   one(query: string, parameters: any) {
     return this.pgp.oneOrNone(query, parameters);
+  }
+  none(query: string, parameters: any): void {
+    return this.pgp.none(query, parameters)
   }
 
 }

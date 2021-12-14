@@ -10,12 +10,14 @@ export default class Order {
     freight: number;
     issueDate: Date;
     code: OrderCode;
+    sequence: number;
 
     constructor (cpf: string, issueDate: Date = new Date(), sequence: number = 1) {
         this.cpf = new Cpf(cpf);
         this.items = [];
         this.freight = 0;
         this.issueDate = issueDate;
+        this.sequence = sequence;
         this.code = new OrderCode(issueDate, sequence)
     }
 

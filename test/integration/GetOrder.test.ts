@@ -10,6 +10,7 @@ import CouponRepositoryDatabase from '../../src/infra/repository/database/Coupon
 import ItemRepository from '../../src/domain/repository/ItemRepository';
 import CouponRepository from '../../src/domain/repository/CouponRepository';
 import GetOrder from '../../src/application/GetOrder';
+import OrderRepositoryDatabase from '../../src/infra/repository/database/OrderRepositoryDatabase';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
@@ -28,11 +29,11 @@ describe('GetOrder Tests', () => {
         coupon: "VALE20"
     });
     const database = PgPromiseDatabase.getInstance();
-    // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-    // const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
     const itemRepository = new ItemRepositoryDatabase(database);
     const couponRepository = new CouponRepositoryDatabase(database);
-    const orderRepository = new OrderRepositoryMemory();
+    const orderRepository = new OrderRepositoryDatabase(database);
+    await orderRepository.clean();
+    
     const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, distanceGateway);
     const output = await placeOrder.execute(input);
     
