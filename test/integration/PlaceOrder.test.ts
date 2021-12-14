@@ -19,7 +19,7 @@ describe('PlaceOrder Tests', () => {
     //     database = new PgPromiseDatabase();
     // })
 
-    test.only("Deve fazer um pedido", async function () {
+    test("Deve fazer um pedido", async function () {
         const input = new PlaceOrderInput({
             cpf: "778.278.412-36",
             zipcode: "11.111-11",

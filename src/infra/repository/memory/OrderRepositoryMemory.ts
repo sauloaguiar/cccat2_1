@@ -8,8 +8,13 @@ export default class OrderRepositoryMemory implements OrderRepository {
     this.orders = []
   }
   get(code: string): Promise<Order> {
-    throw new Error("Method not implemented.");
+    const order = this.orders.find(order => order.code.value === code);
+    if (!order) {
+      throw new Error("Order not found")
+    }
+    return Promise.resolve(order);
   }
+
   count(): Promise<number> {
     return Promise.resolve(this.orders.length);
   }
