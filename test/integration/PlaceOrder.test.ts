@@ -10,6 +10,7 @@ import CouponRepositoryDatabase from '../../src/infra/repository/database/Coupon
 import ItemRepository from '../../src/domain/repository/ItemRepository';
 import CouponRepository from '../../src/domain/repository/CouponRepository';
 import OrderRepositoryDatabase from '../../src/infra/repository/database/OrderRepositoryDatabase';
+import MemoryRepositoryFactory from '../../src/infra/factory/MemoryRepositoryFactory';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
@@ -32,36 +33,39 @@ describe('PlaceOrder Tests', () => {
             coupon: "VALE20"
         });
         const database = PgPromiseDatabase.getInstance();
-        const itemRepository = new ItemRepositoryDatabase(database);
-        const couponRepository = new CouponRepositoryDatabase(database);
+        const repositoryFactory = new MemoryRepositoryFactory();
+
         const orderRepository = new OrderRepositoryDatabase(database);
         await orderRepository.clean();
-        const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, distanceGateway);
+        
+        const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
         const output = await placeOrder.execute(input);
         expect(output.total).toBe(5982);
     });
 
 test("Deve fazer um pedido com coupon de desconto expirado", async function () {
 
-        const input = new PlaceOrderInput({
-            cpf: "778.278.412-36",
-            zipcode: "11.111-11",
-            items: [
-                { id: '1', quantity: 2},
-                { id: '2', quantity: 1},
-                { id: '3', quantity: 3}
-            ],
-            coupon: "VALE20_EXPIRED"
-        });
+      const input = new PlaceOrderInput({
+          cpf: "778.278.412-36",
+          zipcode: "11.111-11",
+          items: [
+              { id: '1', quantity: 2},
+              { id: '2', quantity: 1},
+              { id: '3', quantity: 3}
+          ],
+          coupon: "VALE20_EXPIRED"
+      });
 
-        // const database = new PgPromiseDatabase();
-        const database = PgPromiseDatabase.getInstance();
-        const itemRepository = new ItemRepositoryDatabase(database);
-        const couponRepository = new CouponRepositoryDatabase(database);
-        const orderRepository = new OrderRepositoryDatabase(database);
-        const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, distanceGateway);
-        const output = await placeOrder.execute(input);
-        expect(output.total).toBe(7400);
+
+      const database = PgPromiseDatabase.getInstance();
+      const repositoryFactory = new MemoryRepositoryFactory();
+
+      const orderRepository = new OrderRepositoryDatabase(database);
+      await orderRepository.clean();
+      
+      const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
+      const output = await placeOrder.execute(input);
+      expect(output.total).toBe(7400);
     });
 
     test("Deve custar R$ 30,00 para enviar guitarra", async () => {
@@ -76,11 +80,13 @@ test("Deve fazer um pedido com coupon de desconto expirado", async function () {
             coupon: "VALE20_EXPIRED"
         });
         
-        // const database = new PgPromiseDatabase();
         const database = PgPromiseDatabase.getInstance();
-        // const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-        // const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryMemory(), new OrderRepositoryMemory(), distanceGateway);
-        const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(database), new CouponRepositoryDatabase(database), new OrderRepositoryMemory(), distanceGateway);
+        const repositoryFactory = new MemoryRepositoryFactory();
+
+        const orderRepository = new OrderRepositoryDatabase(database);
+        await orderRepository.clean();
+        
+        const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
         const output = await placeOrder.execute(input);
         expect(output.freight).toBe(310);
     });
@@ -97,10 +103,13 @@ test("Deve fazer um pedido com coupon de desconto expirado", async function () {
             issueDate: new Date(),
             coupon: "VALE20_EXPIRED"
         });
-        const itemRepository = new ItemRepositoryMemory();
-        const couponRepository = new CouponRepositoryMemory();
-        const orderRepository = new OrderRepositoryMemory();
-        const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, distanceGateway);
+        const database = PgPromiseDatabase.getInstance();
+        const repositoryFactory = new MemoryRepositoryFactory();
+
+        const orderRepository = repositoryFactory.createOrderRepository();
+        await orderRepository.clean();
+        
+        const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
         const output = await placeOrder.execute(input);
         expect(output.orderCode).toBe("202100000001")
     })

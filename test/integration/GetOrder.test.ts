@@ -11,6 +11,7 @@ import ItemRepository from '../../src/domain/repository/ItemRepository';
 import CouponRepository from '../../src/domain/repository/CouponRepository';
 import GetOrder from '../../src/application/GetOrder';
 import OrderRepositoryDatabase from '../../src/infra/repository/database/OrderRepositoryDatabase';
+import MemoryRepositoryFactory from '../../src/infra/factory/MemoryRepositoryFactory';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
@@ -28,17 +29,17 @@ describe('GetOrder Tests', () => {
         ],
         coupon: "VALE20"
     });
-    const database = PgPromiseDatabase.getInstance();
-    const itemRepository = new ItemRepositoryDatabase(database);
-    const couponRepository = new CouponRepositoryDatabase(database);
-    const orderRepository = new OrderRepositoryDatabase(database);
+
+    const repositoryFactory = new MemoryRepositoryFactory();
+
+    const orderRepository = OrderRepositoryMemory.getInstance();
     await orderRepository.clean();
     
-    const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, distanceGateway);
+    const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
     const output = await placeOrder.execute(input);
     
-    const getOrder = new GetOrder(itemRepository, couponRepository, orderRepository);
-    const getOrderOutput = getOrder.execute(output.orderCode)
-    expect(output.total).toBe(5982);
+    const getOrder = new GetOrder(repositoryFactory);
+    const getOrderOutput = await getOrder.execute(output.orderCode)
+    expect(getOrderOutput.total).toBe(5982);
   });
 })

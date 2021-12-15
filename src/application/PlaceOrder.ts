@@ -5,16 +5,17 @@ import PlaceOrderOutput from "./PlaceOrderOutput";
 import ItemRepository from "../domain/repository/ItemRepository";
 import OrderRepository from "../domain/repository/OrderRepository";
 import CouponRepository from "../domain/repository/CouponRepository";
+import RepositoryFactory from "../domain/factory/RepositoryFactory";
 export default class PlaceOrder {
     distanceGateway: DistanceGateway
     itemRepository: ItemRepository;
     orderRepository: OrderRepository;
     couponRepository: CouponRepository;
 
-    constructor (itemRepository: ItemRepository, couponRepository: CouponRepository, orderRepository: OrderRepository, distanceGateway: DistanceGateway) {
-        this.couponRepository = couponRepository;
-        this.itemRepository = itemRepository;
-        this.orderRepository = orderRepository;
+    constructor (repositoryFactory: RepositoryFactory, distanceGateway: DistanceGateway) {
+        this.couponRepository = repositoryFactory.createCouponRepository();
+        this.itemRepository = repositoryFactory.createItemRepository();
+        this.orderRepository = repositoryFactory.createOrderRepository();
         this.distanceGateway = distanceGateway
     }
 

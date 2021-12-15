@@ -3,9 +3,18 @@ import OrderRepository from "../../../domain/repository/OrderRepository";
 
 export default class OrderRepositoryMemory implements OrderRepository {
   orders: Order[];
+  static instance: OrderRepositoryMemory
   
-  constructor() {
+  private constructor() {
     this.orders = []
+  }
+
+  static getInstance() {
+    if (!OrderRepositoryMemory.instance) {
+      OrderRepositoryMemory.instance = new OrderRepositoryMemory();
+    }
+    
+    return OrderRepositoryMemory.instance;
   }
   
   async clean(): Promise<void> {
