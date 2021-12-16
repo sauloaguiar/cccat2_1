@@ -4,14 +4,8 @@ import ItemRepositoryMemory from '../../src/infra/repository/memory/ItemReposito
 import OrderRepositoryMemory from '../../src/infra/repository/memory/OrderRepositoryMemory';
 import PlaceOrder from '../../src/application/PlaceOrder';
 import PlaceOrderInput from '../../src/application/PlaceOrderInput';
-import PgPromiseDatabase from '../../src/infra/database/PgPromiseDatabase';
-import ItemRepositoryDatabase from '../../src/infra/repository/database/ItemRepositoryDatabase';
-import CouponRepositoryDatabase from '../../src/infra/repository/database/CouponRepositoryDatabase';
-import ItemRepository from '../../src/domain/repository/ItemRepository';
-import CouponRepository from '../../src/domain/repository/CouponRepository';
 import GetOrder from '../../src/application/GetOrder';
-import OrderRepositoryDatabase from '../../src/infra/repository/database/OrderRepositoryDatabase';
-import MemoryRepositoryFactory from '../../src/infra/factory/MemoryRepositoryFactory';
+import DatabaseRepositoryFactory from '../../src/infra/factory/DatabaseRepositoryFactory';
 
 const distanceGateway = new DistanceGatewayAPIMemory();
 
@@ -30,7 +24,7 @@ describe('GetOrder Tests', () => {
         coupon: "VALE20"
     });
 
-    const repositoryFactory = new MemoryRepositoryFactory();
+    const repositoryFactory = new DatabaseRepositoryFactory();
 
     const orderRepository = OrderRepositoryMemory.getInstance();
     await orderRepository.clean();
