@@ -31,9 +31,3 @@ export default class ExpressHttp implements Http {
 }
 
 
-// 
-//   res.json({
-//     code: "202100000001"
-//   });
-// });
-

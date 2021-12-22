@@ -1,8 +1,8 @@
-import ItemRepository from "../domain/repository/ItemRepository";
-import OrderRepository from "../domain/repository/OrderRepository";
-import CouponRepository from "../domain/repository/CouponRepository";
+import ItemRepository from "../../domain/repository/ItemRepository";
+import OrderRepository from "../../domain/repository/OrderRepository";
+import CouponRepository from "../../domain/repository/CouponRepository";
 import GetOrderOutput from "./GetOrderOutput";
-import RepositoryFactory from "../domain/factory/RepositoryFactory";
+import RepositoryFactory from "../../domain/factory/RepositoryFactory";
 
 export default class GetOrder { 
     itemRepository: ItemRepository;
@@ -16,7 +16,6 @@ export default class GetOrder {
     }
 
     async execute (code: string) : Promise<GetOrderOutput> {
-			console.log('code in getorder', code);
 			const order = await this.orderRepository.get(code);
 			const orderItems: any[] = [];
 

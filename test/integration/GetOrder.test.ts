@@ -1,13 +1,21 @@
-import CouponRepositoryMemory from '../../src/infra/repository/memory/CouponRepositoryMemory';
 import DistanceGatewayAPIMemory from '../../src/infra/gateway/memory/DistanceGatewayAPIMemory';
-import ItemRepositoryMemory from '../../src/infra/repository/memory/ItemRepositoryMemory';
 import OrderRepositoryMemory from '../../src/infra/repository/memory/OrderRepositoryMemory';
-import PlaceOrder from '../../src/application/PlaceOrder';
-import PlaceOrderInput from '../../src/application/PlaceOrderInput';
-import GetOrder from '../../src/application/GetOrder';
+import PlaceOrder from '../../src/application/placeOrder/PlaceOrder';
+import PlaceOrderInput from '../../src/application/placeOrder/PlaceOrderInput';
+import GetOrder from '../../src/application/getOrder/GetOrder';
 import DatabaseRepositoryFactory from '../../src/infra/factory/DatabaseRepositoryFactory';
+import RepositoryFactory from '../../src/domain/factory/RepositoryFactory';
 
-const distanceGateway = new DistanceGatewayAPIMemory();
+let distanceGateway: DistanceGatewayAPIMemory
+let repositoryFactory: RepositoryFactory;
+
+beforeEach(async () => {
+  distanceGateway = new DistanceGatewayAPIMemory();
+  
+  repositoryFactory = new DatabaseRepositoryFactory();
+  const orderRepository = repositoryFactory.createOrderRepository();
+  await orderRepository.clean();
+})
 
 describe('GetOrder Tests', () => {
 
@@ -23,11 +31,6 @@ describe('GetOrder Tests', () => {
         ],
         coupon: "VALE20"
     });
-
-    const repositoryFactory = new DatabaseRepositoryFactory();
-
-    const orderRepository = OrderRepositoryMemory.getInstance();
-    await orderRepository.clean();
     
     const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
     const output = await placeOrder.execute(input);
