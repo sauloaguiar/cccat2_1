@@ -25,9 +25,9 @@ describe('GetOrder Tests', () => {
         cpf: "778.278.412-36",
         zipcode: "11.111-11",
         items: [
-            { id: '1', quantity: 2},
-            { id: '2', quantity: 1},
-            { id: '3', quantity: 3}
+            { id: 1, quantity: 2},
+            { id: 2, quantity: 1},
+            { id: 3, quantity: 3}
         ],
         coupon: "VALE20"
     });

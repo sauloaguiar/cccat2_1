@@ -32,6 +32,7 @@ export default class GetOrder {
 			return new GetOrderOutput({
 				orderCode: order.getOrderNumber(),
 				freight: order.freight,
+				taxes: order.taxes,
 				total: order.getTotal(),
 				orderItems
 			})

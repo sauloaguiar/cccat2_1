@@ -24,9 +24,9 @@ describe('PlaceOrder Tests', () => {
         cpf: "778.278.412-36",
         zipcode: "11.111-11",
         items: [
-            { id: '1', quantity: 2},
-            { id: '2', quantity: 1},
-            { id: '3', quantity: 3}
+            { id: 1, quantity: 2},
+            { id: 2, quantity: 1},
+            { id: 3, quantity: 3}
         ],
         coupon: "VALE20"
     });
@@ -42,9 +42,9 @@ describe('PlaceOrder Tests', () => {
         cpf: "778.278.412-36",
         zipcode: "11.111-11",
         items: [
-            { id: '1', quantity: 2},
-            { id: '2', quantity: 1},
-            { id: '3', quantity: 3}
+            { id: 1, quantity: 2},
+            { id: 2, quantity: 1},
+            { id: 3, quantity: 3}
         ],
         coupon: "VALE20_EXPIRED"
     });
@@ -59,9 +59,9 @@ describe('PlaceOrder Tests', () => {
         cpf: "778.278.412-36",
         zipcode: '11.111-111',
         items: [
-            { id: "1", quantity: 2},
-            { id: "2", quantity: 1},
-            { id: "3", quantity: 3}
+            { id: 1, quantity: 2},
+            { id: 2, quantity: 1},
+            { id: 3, quantity: 3}
         ],
         coupon: "VALE20_EXPIRED"
     });
@@ -76,9 +76,9 @@ describe('PlaceOrder Tests', () => {
         cpf: "778.278.412-36",
         zipcode: '11.111-111',
         items: [
-            { id: "1", quantity: 2},
-            { id: "2", quantity: 1},
-            { id: "3", quantity: 3}
+            { id: 1, quantity: 2},
+            { id: 2, quantity: 1},
+            { id: 3, quantity: 3}
         ],
         issueDate: new Date(),
         coupon: "VALE20_EXPIRED"
@@ -87,5 +87,23 @@ describe('PlaceOrder Tests', () => {
     const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
     const output = await placeOrder.execute(input);
     expect(output.orderCode).toBe("202100000001")
-  })
+  });
+
+  test("Deve fazer um pedido calculando os impostos", async function () {
+    const input = new PlaceOrderInput({
+        cpf: "778.278.412-36",
+        zipcode: "11.111-11",
+        items: [
+            { id: 1, quantity: 2},
+            { id: 2, quantity: 1},
+            { id: 3, quantity: 3}
+        ],
+        coupon: "VALE20"
+    });
+    
+    const placeOrder = new PlaceOrder(repositoryFactory, distanceGateway);
+    const output = await placeOrder.execute(input);
+    expect(output.total).toBe(5982);
+    expect(output.taxes).toBe(1054.5);
+  });
 })
