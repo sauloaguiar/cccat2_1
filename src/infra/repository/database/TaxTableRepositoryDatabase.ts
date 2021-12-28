@@ -1,5 +1,5 @@
 import TaxTable from "../../../domain/entity/TaxTable";
-import TaxTableRepository from "../../../domain/repository/TaxRepository";
+import TaxTableRepository from "../../../domain/repository/TaxTableRepository";
 import Database from "../../database/Database";
 
 export default class TaxTableRepositoryDatabase implements TaxTableRepository{
