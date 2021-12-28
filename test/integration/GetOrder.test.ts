@@ -15,6 +15,9 @@ beforeEach(async () => {
   repositoryFactory = new DatabaseRepositoryFactory();
   const orderRepository = repositoryFactory.createOrderRepository();
   await orderRepository.clean();
+  
+  const stockEntryRepository = repositoryFactory.createStockEntryRepository();
+  await stockEntryRepository.clean();
 })
 
 describe('GetOrder Tests', () => {

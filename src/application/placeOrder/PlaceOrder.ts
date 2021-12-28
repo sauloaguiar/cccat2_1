@@ -2,7 +2,7 @@ import DistanceGateway from  '../../domain/gateway/DistanceGateway';
 import PlaceOrderOutput from "./PlaceOrderOutput";
 import RepositoryFactory from "../../domain/factory/RepositoryFactory";
 import PlaceOrderInput from "./PlaceOrderInput";
-import OrderService from "../../domain/services/OrderService";
+import OrderService from "../../domain/services/OrderCreator";
 
 // PlaceOrder funciona como ApplicationService
 // segurança, logging, validação/conversão de parametros devem ser realizada nessa camada.
